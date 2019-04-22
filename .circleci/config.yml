@@ -58,7 +58,7 @@ jobs:
       - run:
           name: install mongo
           command: |
-            ttps://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-3.6.11.tgz
+            https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-3.6.11.tgz
             tar xvzf mongodb-linux-x86_64-ubuntu1204-3.6.11.tgz
             sudo mv mongodb-linux-x86_64-ubuntu1204-3.6.11/bin/* /usr/bin/
             sudo service mongodb start
