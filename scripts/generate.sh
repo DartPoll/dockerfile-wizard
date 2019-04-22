@@ -14,7 +14,7 @@ cd .."
 
 echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
 echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
-apt-get install mongodb-org=3.6 mongodb-org-server=3.6 mongodb-org-shell=3.6 mongodb-org-mongos=3.6 mongodb-org-tools=3.6 && \
+apt-get -y install mongodb-org=3.6 mongodb-org-server=3.6 mongodb-org-shell=3.6 mongodb-org-mongos=3.6 mongodb-org-tools=3.6 && \
 service mongodb start"
 
 if [ ! -e $RUBY_VERSION_NUM ] ; then
