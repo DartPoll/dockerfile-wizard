@@ -33,6 +33,8 @@ image_config: &image_config
 
   BROWSERS: false
 
+  REDIS_VERSION: 3.2.10
+
 version: 2
 jobs:
   build:
@@ -43,25 +45,6 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: install redis
-          command: |
-            pushd /tmp
-            wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz
-            tar xzf redis-$REDIS_VERSION.tar.gz
-            cd redis-$REDIS_VERSION && make
-            src/redis-server --daemonize yes
-            popd
-          environment:
-            REDIS_VERSION: 3.2.10
-
-      - run:
-          name: install mongo
-          command: |
-            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-            echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
-            apt-get install -y mongodb-org=3.6 mongodb-org-server=3.6 mongodb-org-shell=3.6 mongodb-org-mongos=3.6 mongodb-org-tools=3.6
-            service mongodb start
       - run: bash scripts/generate.sh > Dockerfile
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run: docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG .
