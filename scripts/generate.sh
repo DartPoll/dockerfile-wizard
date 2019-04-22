@@ -4,7 +4,13 @@ echo "FROM buildpack-deps:$(awk -F'_' '{print tolower($2)}' <<< $LINUX_VERSION)"
 
 echo "RUN apt-get update"
 
-echo "RUN pushd /tmp && wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz && tar xzf redis-$REDIS_VERSION.tar.gz && cd redis-$REDIS_VERSION && make && src/redis-server --daemonize yes && popd"
+echo "RUN cd /tmp && \
+wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz && \
+tar xzf redis-$REDIS_VERSION.tar.gz && \
+cd redis-$REDIS_VERSION && \
+make && \
+src/redis-server --daemonize yes && \
+cd .."
 
 echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
 echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
