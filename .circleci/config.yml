@@ -54,24 +54,13 @@ jobs:
             popd
           environment:
             REDIS_VERSION: 3.2.10
-      - run:
-          name: install redis
-          command: |
-            pushd /tmp
-            wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz
-            tar xzf redis-$REDIS_VERSION.tar.gz
-            cd redis-$REDIS_VERSION && make
-            src/redis-server --daemonize yes
-            popd
-          environment:
-            REDIS_VERSION: 3.2.10
-##      - run: bash scripts/generate.sh > Dockerfile
+     - run: bash scripts/generate.sh > Dockerfile
 
-##      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+     - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-##      - run: docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG .
+     - run: docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG .
 
-##      - run: docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG && sleep 10
+     - run: docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG && sleep 10
 
 ##      - store_artifacts:
 ##          path: Dockerfile
