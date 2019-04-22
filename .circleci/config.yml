@@ -13,7 +13,7 @@ image_config: &image_config
   # make sure you also add the values of your IMAGE_NAME & IMAGE_TAG variables
   # to the `test_image` job (line 55)
 
-  LINUX_VERSION: UBUNTU_TRUSTY
+  LINUX_VERSION: UBUNTU_XENIAL
 
   # RUBY_VERSION_NUM: # pick a version from https://cache.ruby-lang.org/pub/ruby
 
@@ -58,15 +58,18 @@ jobs:
       - run:
           name: install mongo
           command: |
-            https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-3.6.11.tgz
-            tar xvzf mongodb-linux-x86_64-ubuntu1204-3.6.11.tgz
-            sudo mv mongodb-linux-x86_64-ubuntu1204-3.6.11/bin/* /usr/bin/
-            sudo service mongodb start
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+            echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+            apt-get install -y mongodb-org=3.6 mongodb-org-server=3.6 mongodb-org-shell=3.6 mongodb-org-mongos=3.6 mongodb-org-tools=3.6
+            service mongodb start
       - run: bash scripts/generate.sh > Dockerfile
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run: docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG .
       - run: docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG && sleep 10
 
+            # wget https://repo.mongodb.org/apt/ubuntu/dists/xenial/mongodb-org/3.6/multiverse/binary-amd64/mongodb-org-server_3.6.12_amd64.deb
+            # tar xvzf mongodb-linux-x86_64-ubuntu1204-3.6.11.tgz
+            # sudo mv mongodb-linux-x86_64-ubuntu1204-3.6.11/bin/* /usr/bin/
 ##      - store_artifacts:
 ##          path: Dockerfile
 
