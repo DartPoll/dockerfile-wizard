@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "LABEL com.circleci.preserve-entrypoint=true"
 echo "FROM buildpack-deps:$(awk -F'_' '{print tolower($2)}' <<< $LINUX_VERSION)"
 
 echo "RUN apt-get update"
