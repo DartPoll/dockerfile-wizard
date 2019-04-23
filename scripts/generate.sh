@@ -27,15 +27,13 @@ echo "RUN set -x \
 echo "RUN mkdir -p /data/db /data/configdb \
 	&& chown -R mongodb:mongodb /data/db /data/configdb"
 echo "VOLUME /data/db /data/configdb"
-echo "RUN mongod --fork --logpath /var/log/mongodb.log"
 
 echo "RUN cd /tmp && \
 wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz && \
 tar xzf redis-$REDIS_VERSION.tar.gz && \
 cd redis-$REDIS_VERSION && \
 make && \
-src/redis-server --daemonize yes && \
-cd .."
+cd ..""
 
 
 if [ ! -e $RUBY_VERSION_NUM ] ; then
@@ -168,4 +166,4 @@ RUN apt-get -y install libgconf-2-4 \
   && chmod +x /usr/local/bin/chromedriver"
 fi
 
-echo "CMD /tmp/redis-$REDIS_VERSION/src/redis-server --daemonize yes && mongod --fork"
+echo "CMD /tmp/redis-3.2.10/src/redis-server --daemonize yes && mongod --fork --logpath /var/log/mongodb.log"
