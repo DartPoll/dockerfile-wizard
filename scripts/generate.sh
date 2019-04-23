@@ -4,6 +4,11 @@ echo "FROM buildpack-deps:$(awk -F'_' '{print tolower($2)}' <<< $LINUX_VERSION)"
 
 echo "RUN apt-get update"
 
+echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
+echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
+apt-get -y install mongodb=3.6 mongodb-server=3.6 mongodb-shell=3.6 mongodb-mongos=3.6 mongodb-tools=3.6 && \
+service mongodb start"
+
 echo "RUN cd /tmp && \
 wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz && \
 tar xzf redis-$REDIS_VERSION.tar.gz && \
@@ -12,10 +17,6 @@ make && \
 src/redis-server --daemonize yes && \
 cd .."
 
-echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
-apt-get -y install mongodb-org=3.6 mongodb-org-server=3.6 mongodb-org-shell=3.6 mongodb-org-mongos=3.6 mongodb-org-tools=3.6 && \
-service mongodb start"
 
 if [ ! -e $RUBY_VERSION_NUM ] ; then
     echo "RUN apt-get install -y libssl-dev && wget http://ftp.ruby-lang.org/pub/ruby/$(awk -F'.' '{ print $1"."$2 }' <<< $RUBY_VERSION_NUM)/ruby-$RUBY_VERSION_NUM.tar.gz && \
