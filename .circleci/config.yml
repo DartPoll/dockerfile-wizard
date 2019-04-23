@@ -6,7 +6,7 @@ image_config: &image_config
 
   IMAGE_NAME: mongo_node_redis_undockerized
 
-  IMAGE_TAG: 2
+  IMAGE_TAG: 3
 
   # NOTE: if you're modifying this config.yml file manually
   # rather than using the included setup script,

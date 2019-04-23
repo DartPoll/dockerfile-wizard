@@ -166,4 +166,4 @@ RUN apt-get -y install libgconf-2-4 \
   && chmod +x /usr/local/bin/chromedriver"
 fi
 
-echo "CMD /tmp/redis-3.2.10/src/redis-server --daemonize yes && mongod --fork --logpath /var/log/mongodb.log"
+echo "CMD /tmp/redis-3.2.10/src/redis-server --daemonize yes && mongod --fork --logpath /var/log/mongodb.log && /bin/sh"
