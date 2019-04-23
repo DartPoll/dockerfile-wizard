@@ -14,7 +14,7 @@ echo "RUN echo \"deb http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unsta
 
 echo "RUN set -x \
 	&& apt-get update \
-	&& apt-get install -y \
+	&& apt-get install -y --allow-unauthenticated \
 		${MONGO_PACKAGE}=$MONGO_VERSION \
 		${MONGO_PACKAGE}-server=$MONGO_VERSION \
 		${MONGO_PACKAGE}-shell=$MONGO_VERSION \
