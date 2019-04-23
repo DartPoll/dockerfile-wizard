@@ -4,22 +4,11 @@ echo "FROM buildpack-deps:$(awk -F'_' '{print tolower($2)}' <<< $LINUX_VERSION)"
 
 echo "RUN apt-get update"
 
-# echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
 # echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
 # apt-get -y install mongodb=3.6 mongodb-server=3.6 mongodb-shell=3.6 mongodb-mongos=3.6 mongodb-tools=3.6 && \
 # service mongodb start"
 
-echo "RUN mkdir /docker-entrypoint-initdb.d"
-echo "ENV GPG_KEYS 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5"
-echo "RUN set -ex; \
-	export GNUPGHOME="$(mktemp -d)"; \
-	for key in $GPG_KEYS; do \
-		gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-	done; \
-	gpg --batch --export $GPG_KEYS > /etc/apt/trusted.gpg.d/mongodb.gpg; \
-	command -v gpgconf && gpgconf --kill all || :; \
-	rm -r "$GNUPGHOME"; \
-	apt-key list"
+echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
 
 echo "ARG MONGO_PACKAGE=mongodb-org"
 echo "ARG MONGO_REPO=repo.mongodb.org"
