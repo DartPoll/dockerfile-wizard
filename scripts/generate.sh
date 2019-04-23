@@ -4,10 +4,48 @@ echo "FROM buildpack-deps:$(awk -F'_' '{print tolower($2)}' <<< $LINUX_VERSION)"
 
 echo "RUN apt-get update"
 
-echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
-apt-get -y install mongodb=3.6 mongodb-server=3.6 mongodb-shell=3.6 mongodb-mongos=3.6 mongodb-tools=3.6 && \
-service mongodb start"
+# echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
+# echo \"deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse\" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list && \
+# apt-get -y install mongodb=3.6 mongodb-server=3.6 mongodb-shell=3.6 mongodb-mongos=3.6 mongodb-tools=3.6 && \
+# service mongodb start"
+
+echo "RUN mkdir /docker-entrypoint-initdb.d"
+echo "ENV GPG_KEYS 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5"
+echo "RUN set -ex; \
+	export GNUPGHOME="$(mktemp -d)"; \
+	for key in $GPG_KEYS; do \
+		gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+	done; \
+	gpg --batch --export $GPG_KEYS > /etc/apt/trusted.gpg.d/mongodb.gpg; \
+	command -v gpgconf && gpgconf --kill all || :; \
+	rm -r "$GNUPGHOME"; \
+	apt-key list"
+
+echo "ARG MONGO_PACKAGE=mongodb-org"
+echo "ARG MONGO_REPO=repo.mongodb.org"
+echo "ENV MONGO_PACKAGE=${MONGO_PACKAGE} MONGO_REPO=${MONGO_REPO}"
+echo ""
+echo "ENV MONGO_MAJOR 3.6"
+echo "ENV MONGO_VERSION 3.6.12"
+echo "# bashbrew-architectures:amd64 arm64v8"
+echo "RUN echo \"deb http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR multiverse\" | tee \"/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list\""
+
+echo "RUN set -x \
+	&& apt-get update \
+	&& apt-get install -y \
+		${MONGO_PACKAGE}=$MONGO_VERSION \
+		${MONGO_PACKAGE}-server=$MONGO_VERSION \
+		${MONGO_PACKAGE}-shell=$MONGO_VERSION \
+		${MONGO_PACKAGE}-mongos=$MONGO_VERSION \
+		${MONGO_PACKAGE}-tools=$MONGO_VERSION \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/mongodb \
+	&& mv /etc/mongod.conf /etc/mongod.conf.orig"
+
+echo "RUN mkdir -p /data/db /data/configdb \
+	&& chown -R mongodb:mongodb /data/db /data/configdb"
+echo "VOLUME /data/db /data/configdb"
+echo "RUN mongod"
 
 echo "RUN cd /tmp && \
 wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz && \
