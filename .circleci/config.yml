@@ -35,6 +35,11 @@ image_config: &image_config
 
   REDIS_VERSION: 3.2.10
 
+  MONGO_VERSION: 3.6.12
+  MONGO_MAJOR: 3.6
+  MONGO_PACKAGE: mongodb-org
+  MONGO_REPO: repo.mongodb.org
+
 version: 2
 jobs:
   build:

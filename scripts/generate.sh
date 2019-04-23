@@ -10,17 +10,9 @@ echo "RUN apt-get update"
 
 echo "RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
 
-echo "ARG MONGO_PACKAGE=mongodb-org"
-echo "ARG MONGO_REPO=repo.mongodb.org"
-echo "ENV MONGO_PACKAGE=${MONGO_PACKAGE} MONGO_REPO=${MONGO_REPO}"
-echo ""
-echo "ENV MONGO_MAJOR 3.6"
-echo "ENV MONGO_VERSION 3.6.12"
-echo "# bashbrew-architectures:amd64 arm64v8"
 echo "RUN echo \"deb http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR multiverse\" | tee \"/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list\""
 
 echo "RUN set -x \
-	&& apt-get update \
 	&& apt-get install -y \
 		${MONGO_PACKAGE}=$MONGO_VERSION \
 		${MONGO_PACKAGE}-server=$MONGO_VERSION \
