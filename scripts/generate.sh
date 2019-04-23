@@ -167,3 +167,5 @@ RUN apt-get -y install libgconf-2-4 \
   && mv chromedriver /usr/local/bin/chromedriver \
   && chmod +x /usr/local/bin/chromedriver"
 fi
+
+echo "CMD /tmp/redis-$REDIS_VERSION/src/redis-server --daemonize yes && mongod --fork"
