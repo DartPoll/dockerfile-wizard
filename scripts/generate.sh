@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "LABEL com.circleci.preserve-entrypoint=true"
 echo "FROM buildpack-deps:$(awk -F'_' '{print tolower($2)}' <<< $LINUX_VERSION)"
 
 echo "RUN apt-get update"
@@ -167,4 +166,5 @@ RUN apt-get -y install libgconf-2-4 \
   && chmod +x /usr/local/bin/chromedriver"
 fi
 
+echo "LABEL com.circleci.preserve-entrypoint=true"
 echo "ENTRYPOINT /tmp/redis-3.2.10/src/redis-server --daemonize yes && mongod --fork --logpath /var/log/mongodb.log && /bin/sh"
