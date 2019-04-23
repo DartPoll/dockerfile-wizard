@@ -27,7 +27,7 @@ echo "RUN set -x \
 echo "RUN mkdir -p /data/db /data/configdb \
 	&& chown -R mongodb:mongodb /data/db /data/configdb"
 echo "VOLUME /data/db /data/configdb"
-echo "RUN mongod"
+echo "RUN mongod --fork --logpath /var/log/mongodb.log"
 
 echo "RUN cd /tmp && \
 wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz && \
